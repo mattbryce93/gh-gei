@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
@@ -16,16 +17,10 @@ public class AwsApi : IDisposable
     private readonly ITransferUtility _transferUtility;
 
 #pragma warning disable CA2000
-    public AwsApi(string awsAccessKey, string awsSecretKey, string awsSessionToken = null) : this(new TransferUtility( 
-        if (awsSessionToken == null) 
-        { 
-            new AmazonS3Client(awsAccessKey, awsSecretKey, RegionEndpoint)
-        } 
-        else 
-        {
-            CreateAmazonS3Client(new SessionAWSCredentials(awsAccessKey, awsSecretAccess, awsSessionToken))
-        }
-    ))
+    public AwsApi(string awsAccessKey, string awsSecretKey, string awsSessionToken = null)
+        : this(new TransferUtility(awsSessionToken == null ?
+            new AmazonS3Client(awsAccessKey, awsSecretKey, RegionEndpoint) :
+            new AmazonS3Client(new SessionAWSCredentials(awsAccessKey, awsSecretKey, awsSessionToken), RegionEndpoint)))
 #pragma warning restore CA2000
     {
     }
