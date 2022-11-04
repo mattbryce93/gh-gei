@@ -13,6 +13,7 @@ public class EnvironmentVariableProvider
     private const string AZURE_STORAGE_CONNECTION_STRING = "AZURE_STORAGE_CONNECTION_STRING";
     private const string AWS_ACCESS_KEY = "AWS_ACCESS_KEY";
     private const string AWS_SECRET_KEY = "AWS_SECRET_KEY";
+    private const string AWS_SESSION_TOKEN = "AWS_SESSION_TOKEN";
 
     private readonly OctoLogger _logger;
 
@@ -51,6 +52,10 @@ public class EnvironmentVariableProvider
     public virtual string AwsAccessKey(bool throwIfNotFound = true) =>
         GetSecret(AWS_ACCESS_KEY)
         ?? (throwIfNotFound ? throw new OctoshiftCliException($"{AWS_ACCESS_KEY} environment variable is not set.") : null);
+
+    public virtual string AwsSessionToken(bool throwIfNotFound = true) =>
+        GetSecret(AWS_SESSION_TOKEN)
+        ?? (throwIfNotFound ? throw new OctoshiftCliException($"{AWS_SESSION_TOKEN} environment variable is not set.") : null);
 
     private string GetSecret(string secretName)
     {
